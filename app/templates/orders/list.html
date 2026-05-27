@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}我的订单 - 梨园书屋{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>我的订单</h1>
+    <p>查看和管理您的订单</p>
+</div>
+
+<div style="margin-bottom: 30px;">
+    <a href="{{ url_for('orders.create_order') }}" class="btn btn-primary">创建新订单</a>
+</div>
+
+{% for order in orders %}
+<div class="order-card">
+    <div class="order-header">
+        <div>
+            <span class="order-id">订单号: {{ order.order_id }}</span>
+            <span class="order-date" style="margin-left: 20px;">
+                {{ order.order_date.strftime('%Y-%m-%d %H:%M') }}
+            </span>
+        </div>
+        <span class="status-badge
+            {% if order.status == '待付款' %}status-pending
+            {% elif order.status == '已付款' %}status-paid
+            {% elif order.status == '已发货' %}status-shipped
+            {% elif order.status == '已完成' %}status-completed
+            {% elif order.status == '已取消' %}status-cancelled
+            {% endif %}">
+            {{ order.status }}
+        </span>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+            <span style="color: var(--text-muted);">包含 {{ order.item_count }} 种图书</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <span class="order-total">¥{{ "%.2f"|format(order.total_amount) }}</span>
+            <a href="{{ url_for('orders.order_detail', order_id=order.order_id) }}"
+               class="btn btn-secondary btn-sm">
+                查看详情
+            </a>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="empty-state">
+    <p>暂无订单记录</p>
+    <a href="{{ url_for('orders.create_order') }}" class="btn btn-primary" style="margin-top: 20px;">
+        去选购图书
+    </a>
+</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}图书目录 - 梨园书屋{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>图书目录</h1>
+    <p>探索我们的精选图书 collection</p>
+</div>
+
+<!-- 搜索框 -->
+<div class="search-container">
+    <form method="GET" action="{{ url_for('books.book_list') }}">
+        <input type="text" name="keyword" class="search-box"
+               placeholder="搜索图书名称、作者或ISBN..."
+               value="{{ keyword or '' }}">
+    </form>
+</div>
+
+<!-- Bento Grid 图书列表 -->
+<div class="bento-grid">
+    {% for book in books %}
+    <div class="book-card">
+        <div class="book-cover">
+            <span>📚</span>
+        </div>
+        <div class="book-info">
+            <h3 class="book-title">{{ book.title }}</h3>
+            <p class="book-author">{{ book.author }}</p>
+            <div class="book-meta">
+                <span class="book-price">¥{{ "%.2f"|format(book.price) }}</span>
+                <span class="book-stock">
+                    {% if book.stock > 0 %}
+                        库存: {{ book.stock }}
+                    {% else %}
+                        暂无库存
+                    {% endif %}
+                </span>
+            </div>
+            <a href="{{ url_for('books.book_detail', isbn=book.ISBN) }}"
+               class="btn btn-secondary btn-sm" style="width: 100%; margin-top: 15px;">
+                查看详情
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-state" style="grid-column: 1 / -1;">
+        <p>暂无图书数据</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- 分页 -->
+{% if total_pages > 1 %}
+<div class="pagination">
+    {% if page > 1 %}
+        <a href="?page={{ page - 1 }}&keyword={{ keyword or '' }}" class="page-link">上一页</a>
+    {% endif %}
+
+    {% for p in range(1, total_pages + 1) %}
+        <a href="?page={{ p }}&keyword={{ keyword or '' }}"
+           class="page-link {% if p == page %}active{% endif %}">
+            {{ p }}
+        </a>
+    {% endfor %}
+
+    {% if page < total_pages %}
+        <a href="?page={{ page + 1 }}&keyword={{ keyword or '' }}" class="page-link">下一页</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

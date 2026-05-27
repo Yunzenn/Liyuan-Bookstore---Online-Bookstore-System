@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}梨园书屋 - 网上书店{% endblock %}
+
+{% block content %}
+<div class="page-header" style="margin-top: 60px;">
+    <h1 style="font-size: 4rem; margin-bottom: 20px;">梨园书屋</h1>
+    <p style="font-size: 1.3rem; color: var(--text-muted);">探索知识的海洋，发现阅读的乐趣</p>
+</div>
+
+<div style="text-align: center; margin: 60px 0;">
+    <a href="{{ url_for('books.book_list') }}" class="btn btn-primary" style="padding: 16px 40px; font-size: 1.1rem; margin-right: 15px;">
+        浏览图书
+    </a>
+    {% if not session.customer_id %}
+        <a href="{{ url_for('auth.register') }}" class="btn btn-secondary" style="padding: 16px 40px; font-size: 1.1rem;">
+            注册账号
+        </a>
+    {% else %}
+        <a href="{{ url_for('orders.order_list') }}" class="btn btn-secondary" style="padding: 16px 40px; font-size: 1.1rem;">
+            我的订单
+        </a>
+    {% endif %}
+</div>
+
+<!-- 特性介绍 -->
+<div class="bento-grid" style="margin-top: 80px; grid-template-columns: repeat(3, 1fr);">
+    <div class="card" style="text-align: center; padding: 40px 30px;">
+        <div style="font-size: 3rem; margin-bottom: 20px;">📚</div>
+        <h3 style="margin-bottom: 10px;">海量图书</h3>
+        <p style="color: var(--text-muted);">精选计算机、文学、科技类图书</p>
+    </div>
+
+    <div class="card" style="text-align: center; padding: 40px 30px;">
+        <div style="font-size: 3rem; margin-bottom: 20px;">🛒</div>
+        <h3 style="margin-bottom: 10px;">便捷下单</h3>
+        <p style="color: var(--text-muted);">支持多种图书一次下单</p>
+    </div>
+
+    <div class="card" style="text-align: center; padding: 40px 30px;">
+        <div style="font-size: 3rem; margin-bottom: 20px;">📦</div>
+        <h3 style="margin-bottom: 10px;">订单追踪</h3>
+        <p style="color: var(--text-muted);">实时查看订单状态</p>
+    </div>
+</div>
+{% endblock %}

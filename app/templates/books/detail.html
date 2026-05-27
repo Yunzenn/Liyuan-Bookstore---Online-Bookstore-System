@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} - 梨园书屋{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>图书详情</h1>
+    <p>查看图书完整信息</p>
+</div>
+
+<div class="book-detail">
+    <div class="book-detail-cover">
+        <span>📚</span>
+    </div>
+
+    <div class="book-detail-info">
+        <h2>{{ book.title }}</h2>
+
+        <ul class="book-detail-meta">
+            <li>
+                <span>ISBN</span>
+                <span>{{ book.ISBN }}</span>
+            </li>
+            <li>
+                <span>作者</span>
+                <span>{{ book.author }}</span>
+            </li>
+            <li>
+                <span>出版社</span>
+                <span>{{ book.publisher or '未知' }}</span>
+            </li>
+            <li>
+                <span>出版年</span>
+                <span>{{ book.publish_year or '未知' }}</span>
+            </li>
+            <li>
+                <span>定价</span>
+                <span style="font-size: 1.3rem; font-weight: 700; background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    ¥{{ "%.2f"|format(book.price) }}
+                </span>
+            </li>
+            <li>
+                <span>库存状态</span>
+                <span class="book-stock">
+                    {% if book.stock > 0 %}
+                        有货 ({{ book.stock }}本)
+                    {% else %}
+                        暂无库存
+                    {% endif %}
+                </span>
+            </li>
+        </ul>
+
+        <div style="display: flex; gap: 10px; margin-top: 30px;">
+            {% if session.customer_id and book.stock > 0 %}
+                <a href="{{ url_for('orders.create_order') }}" class="btn btn-primary">
+                    立即购买
+                </a>
+            {% endif %}
+            <a href="{{ url_for('books.book_list') }}" class="btn btn-secondary">返回列表</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

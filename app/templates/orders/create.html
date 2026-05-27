@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}创建订单 - 梨园书屋{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>创建订单</h1>
+    <p>选择您想要购买的图书</p>
+</div>
+
+<form method="POST" action="{{ url_for('orders.create_order') }}">
+    <div class="bento-grid">
+        {% for book in books %}
+        <div class="book-card">
+            <div class="book-cover">
+                <span>📚</span>
+            </div>
+            <div class="book-info">
+                <h3 class="book-title">{{ book.title }}</h3>
+                <p class="book-author">{{ book.author }}</p>
+                <div class="book-meta">
+                    <span class="book-price">¥{{ "%.2f"|format(book.price) }}</span>
+                    <span class="book-stock">库存: {{ book.stock }}</span>
+                </div>
+                <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="check_{{ book.ISBN }}" name="check_{{ book.ISBN }}"
+                           class="book-checkbox" style="width: 20px; height: 20px; accent-color: var(--accent-blue);">
+                    <label for="check_{{ book.ISBN }}" style="color: var(--text-secondary); font-size: 0.9rem;">
+                        选择
+                    </label>
+                    <input type="number" name="quantity_{{ book.ISBN }}" class="quantity-input"
+                           value="1" min="1" max="{{ book.stock }}" style="margin-left: auto;">
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-state" style="grid-column: 1 / -1;">
+            <p>暂无可购买的图书</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if books %}
+    <div style="text-align: center; margin-top: 40px;">
+        <button type="submit" class="btn btn-primary" style="padding: 14px 40px; font-size: 1.1rem;">
+            提交订单
+        </button>
+    </div>
+    {% endif %}
+</form>
+
+{% block extra_js %}
+<script>
+// 表单提交验证
+document.querySelector('form').addEventListener('submit', function(e) {
+    const checkboxes = document.querySelectorAll('.book-checkbox:checked');
+    if (checkboxes.length === 0) {
+        e.preventDefault();
+        showToast('请至少选择一本图书', 'error');
+        return false;
+    }
+
+    // 确保选中的图书数量大于0
+    for (const checkbox of checkboxes) {
+        const isbn = checkbox.id.replace('check_', '');
+        const quantity = document.querySelector(`input[name="quantity_${isbn}"]`);
+        if (!quantity || parseInt(quantity.value) < 1) {
+            e.preventDefault();
+            showToast('请填写有效的购买数量', 'error');
+            return false;
+        }
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

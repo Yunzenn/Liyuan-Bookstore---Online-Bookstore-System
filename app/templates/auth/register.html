@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}注册 - 梨园书屋{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h1 class="auth-title">创建账号</h1>
+
+        <form method="POST" action="{{ url_for('auth.register') }}">
+            <div class="form-group">
+                <label class="form-label" for="customer_name">客户姓名 *</label>
+                <input type="text" id="customer_name" name="customer_name" class="form-control"
+                       placeholder="请输入姓名" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="email">邮箱地址 *</label>
+                <input type="email" id="email" name="email" class="form-control"
+                       placeholder="请输入邮箱" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="phone">电话号码</label>
+                <input type="tel" id="phone" name="phone" class="form-control"
+                       placeholder="请输入电话">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="address">地址</label>
+                <input type="text" id="address" name="address" class="form-control"
+                       placeholder="请输入地址">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">密码 *</label>
+                <input type="password" id="password" name="password" class="form-control"
+                       placeholder="请输入密码（至少6位）" required minlength="6">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="confirm_password">确认密码 *</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="form-control"
+                       placeholder="请再次输入密码" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+                注册
+            </button>
+        </form>
+
+        <p style="text-align: center; margin-top: 24px; color: var(--text-muted);">
+            已有账号？
+            <a href="{{ url_for('auth.login') }}" style="color: var(--accent-blue); text-decoration: none;">
+                立即登录
+            </a>
+        </p>
+    </div>
+</div>
+{% endblock %}
