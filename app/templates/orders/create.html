@@ -8,41 +8,65 @@
     <p>选择您想要购买的图书</p>
 </div>
 
-<form method="POST" action="{{ url_for('orders.create_order') }}">
-    <div class="bento-grid">
+<form method="POST" action="{{ url_for('orders.create_order') }}" id="orderForm">
+    <div class="book-grid">
         {% for book in books %}
-        <div class="book-card">
+        <div class="book-card" style="position: relative;">
+            <input type="checkbox" id="check_{{ book.ISBN }}" name="check_{{ book.ISBN }}"
+                   class="card-checkbox" onchange="toggleQuantity(this, '{{ book.ISBN }}')">
+
             <div class="book-cover">
-                <span>📚</span>
+                {% set covers = {
+                    '9787111234567': 'https://img1.doubanio.com/view/subject/l/public/s1727711.jpg',
+                    '9787111234568': 'https://img2.doubanio.com/view/subject/l/public/s6024897.jpg',
+                    '9787111234569': 'https://img1.doubanio.com/view/subject/l/public/s29472777.jpg',
+                    '9787111234570': 'https://img1.doubanio.com/view/subject/l/public/s33439818.jpg',
+                    '9787111234571': 'https://img2.doubanio.com/view/subject/l/public/s27679011.jpg',
+                    '9787020002207': 'https://img2.doubanio.com/view/subject/l/public/s1070959.jpg',
+                    '9787020002208': 'https://img1.doubanio.com/view/subject/l/public/s1076963.jpg',
+                    '9787020002209': 'https://img2.doubanio.com/view/subject/l/public/s1076962.jpg',
+                    '9787020002210': 'https://img1.doubanio.com/view/subject/l/public/s1076961.jpg',
+                    '9787115546012': 'https://img1.doubanio.com/view/subject/l/public/s29195878.jpg',
+                    '9787115546013': 'https://img1.doubanio.com/view/subject/l/public/s25648004.jpg',
+                    '9787115546014': 'https://img2.doubanio.com/view/subject/l/public/s29651122.jpg'
+                } %}
+                {% if book.ISBN in covers %}
+                    <img src="{{ covers[book.ISBN] }}" alt="{{ book.title }}" loading="lazy">
+                {% else %}
+                    <div class="book-cover-placeholder">📚</div>
+                {% endif %}
             </div>
-            <div class="book-info">
+
+            <div class="book-body">
                 <h3 class="book-title">{{ book.title }}</h3>
                 <p class="book-author">{{ book.author }}</p>
-                <div class="book-meta">
+
+                <div class="book-footer">
                     <span class="book-price">¥{{ "%.2f"|format(book.price) }}</span>
                     <span class="book-stock">库存: {{ book.stock }}</span>
                 </div>
-                <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
-                    <input type="checkbox" id="check_{{ book.ISBN }}" name="check_{{ book.ISBN }}"
-                           class="book-checkbox" style="width: 20px; height: 20px; accent-color: var(--accent-blue);">
-                    <label for="check_{{ book.ISBN }}" style="color: var(--text-secondary); font-size: 0.9rem;">
-                        选择
-                    </label>
-                    <input type="number" name="quantity_{{ book.ISBN }}" class="quantity-input"
-                           value="1" min="1" max="{{ book.stock }}" style="margin-left: auto;">
+
+                <!-- Quantity Selector -->
+                <div class="quantity-selector" id="qty_{{ book.ISBN }}" style="margin-top: 12px; display: none;">
+                    <button type="button" class="qty-btn minus" onclick="changeQty('{{ book.ISBN }}', -1)">−</button>
+                    <input type="number" name="quantity_{{ book.ISBN }}" class="qty-input"
+                           value="1" min="1" max="{{ book.stock }}">
+                    <button type="button" class="qty-btn plus" onclick="changeQty('{{ book.ISBN }}', 1)">+</button>
                 </div>
             </div>
         </div>
         {% else %}
         <div class="empty-state" style="grid-column: 1 / -1;">
-            <p>暂无可购买的图书</p>
+            <div class="empty-icon">📚</div>
+            <h3 class="empty-title">暂无可购买的图书</h3>
+            <p class="empty-text">当前没有可用的图书库存</p>
         </div>
         {% endfor %}
     </div>
 
     {% if books %}
     <div style="text-align: center; margin-top: 40px;">
-        <button type="submit" class="btn btn-primary" style="padding: 14px 40px; font-size: 1.1rem;">
+        <button type="submit" class="btn btn-primary btn-lg">
             提交订单
         </button>
     </div>
@@ -51,24 +75,30 @@
 
 {% block extra_js %}
 <script>
-// 表单提交验证
-document.querySelector('form').addEventListener('submit', function(e) {
-    const checkboxes = document.querySelectorAll('.book-checkbox:checked');
+function toggleQuantity(checkbox, isbn) {
+    const qtyDiv = document.getElementById('qty_' + isbn);
+    if (checkbox.checked) {
+        qtyDiv.style.display = 'inline-flex';
+    } else {
+        qtyDiv.style.display = 'none';
+    }
+}
+
+function changeQty(isbn, delta) {
+    const input = document.querySelector(`input[name="quantity_${isbn}"]`);
+    const currentValue = parseInt(input.value) || 1;
+    const min = parseInt(input.min) || 1;
+    const max = parseInt(input.max) || 999;
+    const newValue = Math.max(min, Math.min(max, currentValue + delta));
+    input.value = newValue;
+}
+
+document.getElementById('orderForm').addEventListener('submit', function(e) {
+    const checkboxes = document.querySelectorAll('.card-checkbox:checked');
     if (checkboxes.length === 0) {
         e.preventDefault();
         showToast('请至少选择一本图书', 'error');
         return false;
-    }
-
-    // 确保选中的图书数量大于0
-    for (const checkbox of checkboxes) {
-        const isbn = checkbox.id.replace('check_', '');
-        const quantity = document.querySelector(`input[name="quantity_${isbn}"]`);
-        if (!quantity || parseInt(quantity.value) < 1) {
-            e.preventDefault();
-            showToast('请填写有效的购买数量', 'error');
-            return false;
-        }
     }
 });
 </script>

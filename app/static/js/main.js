@@ -1,14 +1,8 @@
-// 网上书店 - 主JavaScript文件
+// 梨园书屋 - 主JavaScript文件
 
 document.addEventListener('DOMContentLoaded', function() {
-    // 初始化闪光消息自动消失
     initFlashMessages();
-
-    // 初始化导航栏滚动效果
-    initNavbarScroll();
-
-    // 初始化卡片鼠标跟踪效果
-    initCardHoverEffect();
+    initQuantityControls();
 });
 
 // 闪光消息自动消失
@@ -22,100 +16,22 @@ function initFlashMessages() {
     });
 }
 
-// 导航栏滚动效果
-function initNavbarScroll() {
-    const navbar = document.querySelector('.navbar');
-    if (!navbar) return;
+// 数量选择器控制
+function initQuantityControls() {
+    document.querySelectorAll('.quantity-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const input = this.parentElement.querySelector('.quantity-input');
+            const currentValue = parseInt(input.value) || 0;
+            const min = parseInt(input.min) || 1;
+            const max = parseInt(input.max) || 999;
 
-    let lastScroll = 0;
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-
-        if (currentScroll > 100) {
-            navbar.style.background = 'rgba(17, 17, 17, 0.95)';
-            navbar.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.3)';
-        } else {
-            navbar.style.background = 'rgba(17, 17, 17, 0.8)';
-            navbar.style.boxShadow = 'none';
-        }
-
-        lastScroll = currentScroll;
-    });
-}
-
-// 卡片鼠标跟踪发光效果
-function initCardHoverEffect() {
-    const cards = document.querySelectorAll('.book-card, .order-card, .card');
-
-    cards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            card.style.setProperty('--mouse-x', `${x}px`);
-            card.style.setProperty('--mouse-y', `${y}px`);
-
-            // 添加动态光晕
-            if (!card.querySelector('.card-glow')) {
-                const glow = document.createElement('div');
-                glow.className = 'card-glow';
-                glow.style.cssText = `
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    pointer-events: none;
-                    background: radial-gradient(300px circle at var(--mouse-x) var(--mouse-y),
-                        rgba(59, 130, 246, 0.1),
-                        transparent 50%);
-                    border-radius: inherit;
-                    opacity: 0;
-                    transition: opacity 0.3s;
-                `;
-                card.style.position = 'relative';
-                card.appendChild(glow);
-            }
-
-            const glow = card.querySelector('.card-glow');
-            glow.style.opacity = '1';
-        });
-
-        card.addEventListener('mouseleave', () => {
-            const glow = card.querySelector('.card-glow');
-            if (glow) {
-                glow.style.opacity = '0';
+            if (this.classList.contains('minus')) {
+                input.value = Math.max(min, currentValue - 1);
+            } else if (this.classList.contains('plus')) {
+                input.value = Math.min(max, currentValue + 1);
             }
         });
     });
-}
-
-// 显示加载状态
-function showLoading(button) {
-    const originalText = button.textContent;
-    button.disabled = true;
-    button.innerHTML = '<span class="loading"></span> 处理中...';
-    return originalText;
-}
-
-// 隐藏加载状态
-function hideLoading(button, originalText) {
-    button.disabled = false;
-    button.textContent = originalText;
-}
-
-// 确认对话框
-function confirmAction(message) {
-    return new Promise((resolve) => {
-        const result = confirm(message);
-        resolve(result);
-    });
-}
-
-// 格式化价格
-function formatPrice(price) {
-    return `¥${parseFloat(price).toFixed(2)}`;
 }
 
 // 显示提示消息
@@ -139,6 +55,11 @@ function createFlashContainer() {
     container.className = 'flash-messages';
     document.body.appendChild(container);
     return container;
+}
+
+// 确认对话框
+function confirmAction(message) {
+    return confirm(message);
 }
 
 // 添加滑出动画

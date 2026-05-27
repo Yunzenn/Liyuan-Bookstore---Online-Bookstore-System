@@ -10,35 +10,35 @@
 
 <div style="max-width: 600px; margin: 0 auto;">
     <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <h2 style="font-size: 1.5rem;">{{ customer.customer_name }}</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h2 style="font-size: 1.375rem; font-weight: 600;">{{ customer.customer_name }}</h2>
             <a href="{{ url_for('auth.profile_edit') }}" class="btn btn-secondary btn-sm">编辑信息</a>
         </div>
 
-        <ul class="book-detail-meta">
+        <ul class="detail-meta">
             <li>
-                <span>客户ID</span>
-                <span>{{ customer.customer_id }}</span>
+                <span class="detail-meta-label">客户ID</span>
+                <span class="detail-meta-value">{{ customer.customer_id }}</span>
             </li>
             <li>
-                <span>邮箱</span>
-                <span>{{ customer.email }}</span>
+                <span class="detail-meta-label">邮箱</span>
+                <span class="detail-meta-value">{{ customer.email }}</span>
             </li>
             <li>
-                <span>电话</span>
-                <span>{{ customer.phone or '未填写' }}</span>
+                <span class="detail-meta-label">电话</span>
+                <span class="detail-meta-value">{{ customer.phone or '未填写' }}</span>
             </li>
             <li>
-                <span>地址</span>
-                <span>{{ customer.address or '未填写' }}</span>
+                <span class="detail-meta-label">地址</span>
+                <span class="detail-meta-value">{{ customer.address or '未填写' }}</span>
             </li>
             <li>
-                <span>注册时间</span>
-                <span>{{ customer.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                <span class="detail-meta-label">注册时间</span>
+                <span class="detail-meta-value">{{ customer.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
             </li>
         </ul>
 
-        <div style="display: flex; gap: 10px; margin-top: 30px;">
+        <div style="display: flex; gap: 12px; margin-top: 32px;">
             <a href="{{ url_for('orders.order_list') }}" class="btn btn-primary">查看订单</a>
             <a href="{{ url_for('books.book_list') }}" class="btn btn-secondary">浏览图书</a>
         </div>

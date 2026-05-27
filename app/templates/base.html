@@ -7,43 +7,55 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- 导航栏 -->
+    <!-- Navbar -->
     <nav class="navbar">
-        <a href="{{ url_for('books.book_list') }}" class="logo">梨园书屋</a>
-        <ul class="nav-links">
-            <li><a href="{{ url_for('books.book_list') }}">图书目录</a></li>
-            {% if session.customer_id %}
-                <li><a href="{{ url_for('orders.create_order') }}">创建订单</a></li>
-                <li><a href="{{ url_for('orders.order_list') }}">我的订单</a></li>
-            {% endif %}
-        </ul>
-        <div class="nav-auth">
-            {% if session.customer_id %}
-                <a href="{{ url_for('auth.profile') }}" class="btn btn-secondary btn-sm">{{ session.customer_name }}</a>
-                <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary btn-sm">登出</a>
-            {% else %}
-                <a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-sm">登录</a>
-                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">注册</a>
-            {% endif %}
+        <div class="navbar-inner">
+            <a href="{{ url_for('index') }}" class="logo">
+                <span class="logo-icon">📚</span>
+                梨园书屋
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="{{ url_for('books.book_list') }}">图书目录</a></li>
+                {% if session.customer_id %}
+                    <li><a href="{{ url_for('orders.create_order') }}">创建订单</a></li>
+                    <li><a href="{{ url_for('orders.order_list') }}">我的订单</a></li>
+                {% endif %}
+            </ul>
+
+            <div class="nav-auth">
+                {% if session.customer_id %}
+                    <a href="{{ url_for('auth.profile') }}" class="btn btn-secondary btn-sm">
+                        {{ session.customer_name }}
+                    </a>
+                    <a href="{{ url_for('auth.logout') }}" class="btn btn-secondary btn-sm">登出</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-secondary btn-sm">登录</a>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-sm">注册</a>
+                {% endif %}
+            </div>
         </div>
     </nav>
 
-    <!-- 闪光消息 -->
-    <div class="flash-messages">
+    <!-- Flash Messages -->
+    <div class="flash-container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                    <div class="flash-message flash-{{ category }}">
+                        {% if category == 'success' %}✓{% elif category == 'error' %}✕{% else %}ℹ{% endif %}
+                        {{ message }}
+                    </div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
     </div>
 
-    <!-- 主内容 -->
+    <!-- Main Content -->
     <main class="container">
         {% block content %}{% endblock %}
     </main>

@@ -5,53 +5,67 @@
 {% block content %}
 <div class="page-header">
     <h1>图书详情</h1>
-    <p>查看图书完整信息</p>
+    <p><a href="{{ url_for('books.book_list') }}">← 返回图书目录</a></p>
 </div>
 
 <div class="book-detail">
+    <!-- Book Cover -->
     <div class="book-detail-cover">
-        <span>📚</span>
+        {% set covers = {
+            '9787111234567': 'https://img1.doubanio.com/view/subject/l/public/s1727711.jpg',
+            '9787111234568': 'https://img2.doubanio.com/view/subject/l/public/s6024897.jpg',
+            '9787111234569': 'https://img1.doubanio.com/view/subject/l/public/s29472777.jpg',
+            '9787111234570': 'https://img1.doubanio.com/view/subject/l/public/s33439818.jpg',
+            '9787111234571': 'https://img2.doubanio.com/view/subject/l/public/s27679011.jpg',
+            '9787020002207': 'https://img2.doubanio.com/view/subject/l/public/s1070959.jpg',
+            '9787020002208': 'https://img1.doubanio.com/view/subject/l/public/s1076963.jpg',
+            '9787020002209': 'https://img2.doubanio.com/view/subject/l/public/s1076962.jpg',
+            '9787020002210': 'https://img1.doubanio.com/view/subject/l/public/s1076961.jpg',
+            '9787115546012': 'https://img1.doubanio.com/view/subject/l/public/s29195878.jpg',
+            '9787115546013': 'https://img1.doubanio.com/view/subject/l/public/s25648004.jpg',
+            '9787115546014': 'https://img2.doubanio.com/view/subject/l/public/s29651122.jpg'
+        } %}
+        {% if book.ISBN in covers %}
+            <img src="{{ covers[book.ISBN] }}" alt="{{ book.title }}">
+        {% else %}
+            <div class="book-detail-placeholder">📚</div>
+        {% endif %}
     </div>
 
+    <!-- Book Info -->
     <div class="book-detail-info">
-        <h2>{{ book.title }}</h2>
+        <h2 class="book-detail-title">{{ book.title }}</h2>
 
-        <ul class="book-detail-meta">
+        <ul class="detail-meta">
             <li>
-                <span>ISBN</span>
-                <span>{{ book.ISBN }}</span>
+                <span class="detail-meta-label">ISBN</span>
+                <span class="detail-meta-value">{{ book.ISBN }}</span>
             </li>
             <li>
-                <span>作者</span>
-                <span>{{ book.author }}</span>
+                <span class="detail-meta-label">作者</span>
+                <span class="detail-meta-value">{{ book.author }}</span>
             </li>
             <li>
-                <span>出版社</span>
-                <span>{{ book.publisher or '未知' }}</span>
+                <span class="detail-meta-label">出版社</span>
+                <span class="detail-meta-value">{{ book.publisher or '未知' }}</span>
             </li>
             <li>
-                <span>出版年</span>
-                <span>{{ book.publish_year or '未知' }}</span>
-            </li>
-            <li>
-                <span>定价</span>
-                <span style="font-size: 1.3rem; font-weight: 700; background: var(--gradient-2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                    ¥{{ "%.2f"|format(book.price) }}
-                </span>
-            </li>
-            <li>
-                <span>库存状态</span>
-                <span class="book-stock">
-                    {% if book.stock > 0 %}
-                        有货 ({{ book.stock }}本)
-                    {% else %}
-                        暂无库存
-                    {% endif %}
-                </span>
+                <span class="detail-meta-label">出版年</span>
+                <span class="detail-meta-value">{{ book.publish_year or '未知' }}</span>
             </li>
         </ul>
 
-        <div style="display: flex; gap: 10px; margin-top: 30px;">
+        <div class="detail-price">¥{{ "%.2f"|format(book.price) }}</div>
+
+        <div class="detail-stock">
+            {% if book.stock > 0 %}
+                ✓ 有货 ({{ book.stock }}本)
+            {% else %}
+                ✕ 暂无库存
+            {% endif %}
+        </div>
+
+        <div class="detail-actions">
             {% if session.customer_id and book.stock > 0 %}
                 <a href="{{ url_for('orders.create_order') }}" class="btn btn-primary">
                     立即购买

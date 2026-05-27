@@ -5,68 +5,95 @@
 {% block content %}
 <div class="page-header">
     <h1>图书目录</h1>
-    <p>探索我们的精选图书 collection</p>
+    <p>探索我们精选的图书 collection</p>
 </div>
 
-<!-- 搜索框 -->
-<div class="search-container">
-    <form method="GET" action="{{ url_for('books.book_list') }}">
-        <input type="text" name="keyword" class="search-box"
-               placeholder="搜索图书名称、作者或ISBN..."
+<!-- Search -->
+<form method="GET" action="{{ url_for('books.book_list') }}">
+    <div class="search-wrapper">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" name="keyword" class="search-input" placeholder="搜索图书名称、作者或ISBN..."
                value="{{ keyword or '' }}">
-    </form>
-</div>
+    </div>
+</form>
 
-<!-- Bento Grid 图书列表 -->
-<div class="bento-grid">
+{% if keyword %}
+    <p style="margin-bottom: 16px; color: var(--gray-500); font-size: 0.9375rem;">
+        搜索 "{{ keyword }}" 找到 {{ books|length }} 本图书
+        <a href="{{ url_for('books.book_list') }}" style="margin-left: 8px;">清除搜索</a>
+    </p>
+{% endif %}
+
+<!-- Book Grid -->
+<div class="book-grid">
     {% for book in books %}
-    <div class="book-card">
+    <a href="{{ url_for('books.book_detail', isbn=book.ISBN) }}" class="book-card fade-in">
         <div class="book-cover">
-            <span>📚</span>
+            {% set covers = {
+                '9787111234567': 'https://img1.doubanio.com/view/subject/l/public/s1727711.jpg',
+                '9787111234568': 'https://img2.doubanio.com/view/subject/l/public/s6024897.jpg',
+                '9787111234569': 'https://img1.doubanio.com/view/subject/l/public/s29472777.jpg',
+                '9787111234570': 'https://img1.doubanio.com/view/subject/l/public/s33439818.jpg',
+                '9787111234571': 'https://img2.doubanio.com/view/subject/l/public/s27679011.jpg',
+                '9787020002207': 'https://img2.doubanio.com/view/subject/l/public/s1070959.jpg',
+                '9787020002208': 'https://img1.doubanio.com/view/subject/l/public/s1076963.jpg',
+                '9787020002209': 'https://img2.doubanio.com/view/subject/l/public/s1076962.jpg',
+                '9787020002210': 'https://img1.doubanio.com/view/subject/l/public/s1076961.jpg',
+                '9787115546012': 'https://img1.doubanio.com/view/subject/l/public/s29195878.jpg',
+                '9787115546013': 'https://img1.doubanio.com/view/subject/l/public/s25648004.jpg',
+                '9787115546014': 'https://img2.doubanio.com/view/subject/l/public/s29651122.jpg'
+            } %}
+            {% if book.ISBN in covers %}
+                <img src="{{ covers[book.ISBN] }}" alt="{{ book.title }}" loading="lazy">
+            {% else %}
+                <div class="book-cover-placeholder">📚</div>
+            {% endif %}
         </div>
-        <div class="book-info">
+
+        <div class="book-body">
             <h3 class="book-title">{{ book.title }}</h3>
             <p class="book-author">{{ book.author }}</p>
-            <div class="book-meta">
+
+            <div class="book-footer">
                 <span class="book-price">¥{{ "%.2f"|format(book.price) }}</span>
-                <span class="book-stock">
-                    {% if book.stock > 0 %}
-                        库存: {{ book.stock }}
-                    {% else %}
-                        暂无库存
-                    {% endif %}
+                <span class="book-stock {% if book.stock <= 0 %}out{% endif %}">
+                    {% if book.stock > 0 %}有货 ({{ book.stock }}){% else %}暂无库存{% endif %}
                 </span>
             </div>
-            <a href="{{ url_for('books.book_detail', isbn=book.ISBN) }}"
-               class="btn btn-secondary btn-sm" style="width: 100%; margin-top: 15px;">
-                查看详情
-            </a>
         </div>
-    </div>
+    </a>
     {% else %}
     <div class="empty-state" style="grid-column: 1 / -1;">
-        <p>暂无图书数据</p>
+        <div class="empty-icon">📚</div>
+        <h3 class="empty-title">暂无图书</h3>
+        <p class="empty-text">{% if keyword %}未找到匹配的图书，请尝试其他关键词{% else %}图书目录为空{% endif %}</p>
+        {% if keyword %}
+            <a href="{{ url_for('books.book_list') }}" class="btn btn-secondary">查看全部图书</a>
+        {% endif %}
     </div>
     {% endfor %}
 </div>
 
-<!-- 分页 -->
+<!-- Pagination -->
 {% if total_pages > 1 %}
-<div class="pagination">
+<nav class="pagination">
     {% if page > 1 %}
-        <a href="?page={{ page - 1 }}&keyword={{ keyword or '' }}" class="page-link">上一页</a>
+        <a href="?page={{ page - 1 }}{% if keyword %}&keyword={{ keyword }}{% endif %}" class="page-btn">上一页</a>
     {% endif %}
 
     {% for p in range(1, total_pages + 1) %}
-        <a href="?page={{ p }}&keyword={{ keyword or '' }}"
-           class="page-link {% if p == page %}active{% endif %}">
+        <a href="?page={{ p }}{% if keyword %}&keyword={{ keyword }}{% endif %}"
+           class="page-btn {% if p == page %}active{% endif %}">
             {{ p }}
         </a>
     {% endfor %}
 
     {% if page < total_pages %}
-        <a href="?page={{ page + 1 }}&keyword={{ keyword or '' }}" class="page-link">下一页</a>
+        <a href="?page={{ page + 1 }}{% if keyword %}&keyword={{ keyword }}{% endif %}" class="page-btn">下一页</a>
     {% endif %}
-</div>
+</nav>
 {% endif %}
 {% endblock %}
