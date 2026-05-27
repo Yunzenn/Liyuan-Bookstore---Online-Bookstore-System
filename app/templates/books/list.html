@@ -3,9 +3,10 @@
 {% block title %}图书目录 - 梨园书屋{% endblock %}
 
 {% block content %}
+<!-- Page Header -->
 <div class="page-header">
     <h1>图书目录</h1>
-    <p>探索我们精选的图书 collection</p>
+    <p>探索我们精选的优质图书</p>
 </div>
 
 <!-- Search -->
@@ -21,46 +22,27 @@
 </form>
 
 {% if keyword %}
-    <p style="margin-bottom: 16px; color: var(--gray-500); font-size: 0.9375rem;">
-        搜索 "{{ keyword }}" 找到 {{ books|length }} 本图书
-        <a href="{{ url_for('books.book_list') }}" style="margin-left: 8px;">清除搜索</a>
+    <p style="margin-bottom: 20px; color: var(--gray-500); font-size: 0.875rem;">
+        搜索 "<strong>{{ keyword }}</strong>" 找到 {{ books|length }} 本图书
+        <a href="{{ url_for('books.book_list') }}" style="margin-left: 12px;">清除筛选</a>
     </p>
 {% endif %}
 
 <!-- Book Grid -->
 <div class="book-grid">
     {% for book in books %}
-    <a href="{{ url_for('books.book_detail', isbn=book.ISBN) }}" class="book-card fade-in">
+    <a href="{{ url_for('books.book_detail', isbn=book.ISBN) }}" class="book-card">
         <div class="book-cover">
-            {% set covers = {
-                '9787111234567': 'https://img1.doubanio.com/view/subject/l/public/s1727711.jpg',
-                '9787111234568': 'https://img2.doubanio.com/view/subject/l/public/s6024897.jpg',
-                '9787111234569': 'https://img1.doubanio.com/view/subject/l/public/s29472777.jpg',
-                '9787111234570': 'https://img1.doubanio.com/view/subject/l/public/s33439818.jpg',
-                '9787111234571': 'https://img2.doubanio.com/view/subject/l/public/s27679011.jpg',
-                '9787020002207': 'https://img2.doubanio.com/view/subject/l/public/s1070959.jpg',
-                '9787020002208': 'https://img1.doubanio.com/view/subject/l/public/s1076963.jpg',
-                '9787020002209': 'https://img2.doubanio.com/view/subject/l/public/s1076962.jpg',
-                '9787020002210': 'https://img1.doubanio.com/view/subject/l/public/s1076961.jpg',
-                '9787115546012': 'https://img1.doubanio.com/view/subject/l/public/s29195878.jpg',
-                '9787115546013': 'https://img1.doubanio.com/view/subject/l/public/s25648004.jpg',
-                '9787115546014': 'https://img2.doubanio.com/view/subject/l/public/s29651122.jpg'
-            } %}
-            {% if book.ISBN in covers %}
-                <img src="{{ covers[book.ISBN] }}" alt="{{ book.title }}" loading="lazy">
-            {% else %}
-                <div class="book-cover-placeholder">📚</div>
-            {% endif %}
+            <img src="{{ url_for('static', filename='images/covers/' + book.ISBN + '.svg') }}"
+                 alt="{{ book.title }}" loading="lazy">
         </div>
-
         <div class="book-body">
             <h3 class="book-title">{{ book.title }}</h3>
             <p class="book-author">{{ book.author }}</p>
-
             <div class="book-footer">
                 <span class="book-price">¥{{ "%.2f"|format(book.price) }}</span>
                 <span class="book-stock {% if book.stock <= 0 %}out{% endif %}">
-                    {% if book.stock > 0 %}有货 ({{ book.stock }}){% else %}暂无库存{% endif %}
+                    {% if book.stock > 0 %}有货 ({{ book.stock }}){% else %}缺货{% endif %}
                 </span>
             </div>
         </div>
@@ -68,8 +50,8 @@
     {% else %}
     <div class="empty-state" style="grid-column: 1 / -1;">
         <div class="empty-icon">📚</div>
-        <h3 class="empty-title">暂无图书</h3>
-        <p class="empty-text">{% if keyword %}未找到匹配的图书，请尝试其他关键词{% else %}图书目录为空{% endif %}</p>
+        <h3 class="empty-title">{% if keyword %}未找到匹配的图书{% else %}暂无图书{% endif %}</h3>
+        <p class="empty-text">{% if keyword %}请尝试其他关键词{% else %}图书目录为空{% endif %}</p>
         {% if keyword %}
             <a href="{{ url_for('books.book_list') }}" class="btn btn-secondary">查看全部图书</a>
         {% endif %}
@@ -81,7 +63,9 @@
 {% if total_pages > 1 %}
 <nav class="pagination">
     {% if page > 1 %}
-        <a href="?page={{ page - 1 }}{% if keyword %}&keyword={{ keyword }}{% endif %}" class="page-btn">上一页</a>
+        <a href="?page={{ page - 1 }}{% if keyword %}&keyword={{ keyword }}{% endif %}" class="page-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </a>
     {% endif %}
 
     {% for p in range(1, total_pages + 1) %}
@@ -92,7 +76,9 @@
     {% endfor %}
 
     {% if page < total_pages %}
-        <a href="?page={{ page + 1 }}{% if keyword %}&keyword={{ keyword }}{% endif %}" class="page-btn">下一页</a>
+        <a href="?page={{ page + 1 }}{% if keyword %}&keyword={{ keyword }}{% endif %}" class="page-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </a>
     {% endif %}
 </nav>
 {% endif %}

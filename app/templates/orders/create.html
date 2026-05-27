@@ -16,25 +16,8 @@
                    class="card-checkbox" onchange="toggleQuantity(this, '{{ book.ISBN }}')">
 
             <div class="book-cover">
-                {% set covers = {
-                    '9787111234567': 'https://img1.doubanio.com/view/subject/l/public/s1727711.jpg',
-                    '9787111234568': 'https://img2.doubanio.com/view/subject/l/public/s6024897.jpg',
-                    '9787111234569': 'https://img1.doubanio.com/view/subject/l/public/s29472777.jpg',
-                    '9787111234570': 'https://img1.doubanio.com/view/subject/l/public/s33439818.jpg',
-                    '9787111234571': 'https://img2.doubanio.com/view/subject/l/public/s27679011.jpg',
-                    '9787020002207': 'https://img2.doubanio.com/view/subject/l/public/s1070959.jpg',
-                    '9787020002208': 'https://img1.doubanio.com/view/subject/l/public/s1076963.jpg',
-                    '9787020002209': 'https://img2.doubanio.com/view/subject/l/public/s1076962.jpg',
-                    '9787020002210': 'https://img1.doubanio.com/view/subject/l/public/s1076961.jpg',
-                    '9787115546012': 'https://img1.doubanio.com/view/subject/l/public/s29195878.jpg',
-                    '9787115546013': 'https://img1.doubanio.com/view/subject/l/public/s25648004.jpg',
-                    '9787115546014': 'https://img2.doubanio.com/view/subject/l/public/s29651122.jpg'
-                } %}
-                {% if book.ISBN in covers %}
-                    <img src="{{ covers[book.ISBN] }}" alt="{{ book.title }}" loading="lazy">
-                {% else %}
-                    <div class="book-cover-placeholder">📚</div>
-                {% endif %}
+                <img src="{{ url_for('static', filename='images/covers/' + book.ISBN + '.svg') }}"
+                     alt="{{ book.title }}" loading="lazy">
             </div>
 
             <div class="book-body">
@@ -67,6 +50,7 @@
     {% if books %}
     <div style="text-align: center; margin-top: 40px;">
         <button type="submit" class="btn btn-primary btn-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
             提交订单
         </button>
     </div>
@@ -77,28 +61,22 @@
 <script>
 function toggleQuantity(checkbox, isbn) {
     const qtyDiv = document.getElementById('qty_' + isbn);
-    if (checkbox.checked) {
-        qtyDiv.style.display = 'inline-flex';
-    } else {
-        qtyDiv.style.display = 'none';
-    }
+    qtyDiv.style.display = checkbox.checked ? 'inline-flex' : 'none';
 }
 
 function changeQty(isbn, delta) {
     const input = document.querySelector(`input[name="quantity_${isbn}"]`);
-    const currentValue = parseInt(input.value) || 1;
+    const current = parseInt(input.value) || 1;
     const min = parseInt(input.min) || 1;
     const max = parseInt(input.max) || 999;
-    const newValue = Math.max(min, Math.min(max, currentValue + delta));
-    input.value = newValue;
+    input.value = Math.max(min, Math.min(max, current + delta));
 }
 
 document.getElementById('orderForm').addEventListener('submit', function(e) {
-    const checkboxes = document.querySelectorAll('.card-checkbox:checked');
-    if (checkboxes.length === 0) {
+    const checked = document.querySelectorAll('.card-checkbox:checked');
+    if (checked.length === 0) {
         e.preventDefault();
         showToast('请至少选择一本图书', 'error');
-        return false;
     }
 });
 </script>

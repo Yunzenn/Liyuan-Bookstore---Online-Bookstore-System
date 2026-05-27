@@ -1,6 +1,5 @@
 /* =============================================
-   梨园书屋 - 现代简约浅色主题
-   参考 htmlrev.com 组件风格
+   梨园书屋 - Modern Minimal Theme
    ============================================= */
 
 /* CSS Variables */
@@ -47,20 +46,27 @@
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
     background-color: var(--gray-50);
     color: var(--gray-800);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 a {
     color: var(--primary);
     text-decoration: none;
+    transition: color 0.2s;
 }
 
 a:hover {
     color: var(--primary-dark);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
 }
 
 /* ========== Navbar ========== */
@@ -74,7 +80,8 @@ a:hover {
     display: flex;
     align-items: center;
     padding: 0 24px;
-    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.9);
 }
 
 .navbar-inner {
@@ -96,16 +103,21 @@ a:hover {
     text-decoration: none;
 }
 
+.logo:hover {
+    color: var(--gray-900);
+}
+
 .logo-icon {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
     border-radius: var(--radius);
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 1rem;
+    font-size: 1.125rem;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
 }
 
 .nav-links {
@@ -144,11 +156,11 @@ a:hover {
     padding: 10px 20px;
     font-size: 0.875rem;
     font-weight: 500;
-    line-height: 1;
+    line-height: 1.5;
     border: 1px solid transparent;
     border-radius: var(--radius);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
     text-decoration: none;
     white-space: nowrap;
 }
@@ -158,26 +170,36 @@ a:hover {
     box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
 }
 
+.btn svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
 .btn-primary {
     background: var(--primary);
     color: var(--white);
+    box-shadow: 0 1px 2px rgba(79, 70, 229, 0.2);
 }
 
 .btn-primary:hover {
     background: var(--primary-dark);
     color: var(--white);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    transform: translateY(-1px);
 }
 
 .btn-secondary {
     background: var(--white);
     color: var(--gray-700);
     border-color: var(--gray-300);
+    box-shadow: var(--shadow-sm);
 }
 
 .btn-secondary:hover {
     background: var(--gray-50);
     border-color: var(--gray-400);
+    color: var(--gray-800);
 }
 
 .btn-success {
@@ -231,7 +253,7 @@ a:hover {
 .page-header p {
     margin-top: 4px;
     color: var(--gray-500);
-    font-size: 1rem;
+    font-size: 0.9375rem;
 }
 
 /* ========== Search ========== */
@@ -251,13 +273,14 @@ a:hover {
 
 .search-input {
     width: 100%;
-    padding: 12px 16px 12px 42px;
+    padding: 12px 16px 12px 44px;
     background: var(--white);
     border: 1px solid var(--gray-300);
     border-radius: var(--radius);
     font-size: 0.9375rem;
     color: var(--gray-800);
     transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
 }
 
 .search-input:focus {
@@ -273,7 +296,7 @@ a:hover {
 /* ========== Book Grid ========== */
 .book-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 24px;
 }
 
@@ -281,22 +304,26 @@ a:hover {
 .book-card {
     background: var(--white);
     border: 1px solid var(--gray-200);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     overflow: hidden;
     transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
 }
 
 .book-card:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+    transform: translateY(-6px);
     border-color: var(--gray-300);
+    color: inherit;
 }
 
 .book-cover {
     width: 100%;
-    height: 220px;
+    height: 240px;
     overflow: hidden;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
     position: relative;
 }
 
@@ -318,18 +345,18 @@ a:hover {
     align-items: center;
     justify-content: center;
     font-size: 4rem;
-    color: rgba(255, 255, 255, 0.9);
+    background: linear-gradient(135deg, var(--primary-light), var(--primary));
 }
 
 .book-body {
-    padding: 16px;
+    padding: 16px 20px 20px;
 }
 
 .book-title {
     font-size: 1rem;
     font-weight: 600;
     color: var(--gray-900);
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -340,7 +367,7 @@ a:hover {
 .book-author {
     font-size: 0.8125rem;
     color: var(--gray-500);
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 }
 
 .book-footer {
@@ -395,6 +422,7 @@ a:hover {
     font-size: 0.9375rem;
     color: var(--gray-800);
     transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
 }
 
 .form-input:focus,
@@ -413,22 +441,18 @@ a:hover {
 .card {
     background: var(--white);
     border: 1px solid var(--gray-200);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     padding: 24px;
-}
-
-.card-header {
-    padding-bottom: 16px;
-    margin-bottom: 16px;
-    border-bottom: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-sm);
 }
 
 /* ========== Tables ========== */
 .table-wrapper {
     background: var(--white);
     border: 1px solid var(--gray-200);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     overflow: hidden;
+    box-shadow: var(--shadow-sm);
 }
 
 .table {
@@ -440,9 +464,9 @@ a:hover {
     background: var(--gray-50);
     padding: 12px 16px;
     text-align: left;
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: var(--gray-600);
+    color: var(--gray-500);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     border-bottom: 1px solid var(--gray-200);
@@ -469,8 +493,9 @@ a:hover {
     align-items: center;
     padding: 4px 12px;
     border-radius: var(--radius-full);
-    font-size: 0.8125rem;
-    font-weight: 500;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.025em;
 }
 
 .badge-pending {
@@ -502,10 +527,11 @@ a:hover {
 .order-card {
     background: var(--white);
     border: 1px solid var(--gray-200);
-    border-radius: var(--radius-md);
-    padding: 20px;
+    border-radius: var(--radius-lg);
+    padding: 24px;
     margin-bottom: 16px;
     transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
 }
 
 .order-card:hover {
@@ -530,38 +556,7 @@ a:hover {
 .order-date {
     font-size: 0.8125rem;
     color: var(--gray-500);
-}
-
-.order-items {
-    margin: 16px 0;
-}
-
-.order-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px dashed var(--gray-200);
-}
-
-.order-item:last-child {
-    border-bottom: none;
-}
-
-.item-title {
-    font-weight: 500;
-    color: var(--gray-800);
-}
-
-.item-meta {
-    font-size: 0.8125rem;
-    color: var(--gray-500);
-    margin-top: 2px;
-}
-
-.item-price {
-    font-weight: 600;
-    color: var(--primary);
+    margin-left: 12px;
 }
 
 .order-footer {
@@ -589,7 +584,7 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: calc(100vh - 64px);
+    min-height: calc(100vh - 128px);
     padding: 32px 16px;
 }
 
@@ -598,7 +593,7 @@ a:hover {
     max-width: 420px;
     background: var(--white);
     border: 1px solid var(--gray-200);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     padding: 40px;
     box-shadow: var(--shadow-xl);
 }
@@ -707,23 +702,13 @@ a:hover {
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-xl);
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gray-100);
 }
 
 .book-detail-cover img {
     width: 100%;
-    height: 460px;
+    height: 100%;
     object-fit: cover;
-}
-
-.book-detail-placeholder {
-    width: 100%;
-    height: 460px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 6rem;
-    color: rgba(255, 255, 255, 0.9);
 }
 
 .book-detail-title {
@@ -737,18 +722,25 @@ a:hover {
 .detail-meta {
     list-style: none;
     margin-bottom: 32px;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    overflow: hidden;
 }
 
 .detail-meta li {
     display: flex;
     justify-content: space-between;
-    padding: 14px 0;
+    padding: 14px 16px;
     border-bottom: 1px solid var(--gray-100);
     font-size: 0.9375rem;
 }
 
-.detail-meta li:first-child {
-    border-top: 1px solid var(--gray-100);
+.detail-meta li:last-child {
+    border-bottom: none;
+}
+
+.detail-meta li:nth-child(even) {
+    background: var(--gray-50);
 }
 
 .detail-meta-label {
@@ -764,7 +756,7 @@ a:hover {
     font-size: 2rem;
     font-weight: 700;
     color: var(--primary);
-    margin-bottom: 24px;
+    margin-bottom: 16px;
 }
 
 .detail-stock {
@@ -777,7 +769,7 @@ a:hover {
     font-weight: 500;
     background: #ecfdf5;
     color: var(--success);
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
 .detail-actions {
@@ -796,10 +788,11 @@ a:hover {
 .feature-card {
     background: var(--white);
     border: 1px solid var(--gray-200);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     padding: 32px 24px;
     text-align: center;
     transition: all 0.3s;
+    box-shadow: var(--shadow-sm);
 }
 
 .feature-card:hover {
@@ -817,6 +810,7 @@ a:hover {
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
 .feature-title {
@@ -847,7 +841,7 @@ a:hover {
 }
 
 .status-step-label {
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
     color: var(--gray-500);
     margin-top: 8px;
 }
@@ -861,12 +855,18 @@ a:hover {
 .pagination {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 4px;
-    margin-top: 32px;
+    margin-top: 40px;
 }
 
 .page-btn {
-    padding: 8px 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
     background: var(--white);
     border: 1px solid var(--gray-200);
     border-radius: var(--radius);
@@ -876,6 +876,7 @@ a:hover {
     cursor: pointer;
     transition: all 0.2s;
     text-decoration: none;
+    box-shadow: var(--shadow-sm);
 }
 
 .page-btn:hover {
@@ -888,6 +889,7 @@ a:hover {
     background: var(--primary);
     border-color: var(--primary);
     color: var(--white);
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
 }
 
 /* ========== Quantity Selector ========== */
@@ -897,6 +899,7 @@ a:hover {
     border: 1px solid var(--gray-300);
     border-radius: var(--radius);
     overflow: hidden;
+    background: var(--white);
 }
 
 .qty-btn {
@@ -949,19 +952,55 @@ a:hover {
 
 /* ========== Responsive ========== */
 @media (max-width: 768px) {
-    .navbar { padding: 0 16px; }
-    .nav-links { display: none; }
-    .container { padding: 20px 16px; }
-    .page-header h1 { font-size: 1.5rem; }
-    .book-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .book-cover { height: 160px; }
-    .book-detail { grid-template-columns: 1fr; gap: 24px; }
-    .features-grid { grid-template-columns: 1fr; }
-    .auth-card { padding: 24px; }
+    .navbar {
+        padding: 0 16px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .container {
+        padding: 20px 16px;
+    }
+
+    .page-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .book-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .book-cover {
+        height: 180px;
+    }
+
+    .book-detail {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-card {
+        padding: 24px;
+    }
+
+    .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
 }
 
 @media (max-width: 480px) {
-    .book-grid { grid-template-columns: 1fr; }
+    .book-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ========== Animations ========== */

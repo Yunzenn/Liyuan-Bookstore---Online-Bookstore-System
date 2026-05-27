@@ -11,25 +11,7 @@
 <div class="book-detail">
     <!-- Book Cover -->
     <div class="book-detail-cover">
-        {% set covers = {
-            '9787111234567': 'https://img1.doubanio.com/view/subject/l/public/s1727711.jpg',
-            '9787111234568': 'https://img2.doubanio.com/view/subject/l/public/s6024897.jpg',
-            '9787111234569': 'https://img1.doubanio.com/view/subject/l/public/s29472777.jpg',
-            '9787111234570': 'https://img1.doubanio.com/view/subject/l/public/s33439818.jpg',
-            '9787111234571': 'https://img2.doubanio.com/view/subject/l/public/s27679011.jpg',
-            '9787020002207': 'https://img2.doubanio.com/view/subject/l/public/s1070959.jpg',
-            '9787020002208': 'https://img1.doubanio.com/view/subject/l/public/s1076963.jpg',
-            '9787020002209': 'https://img2.doubanio.com/view/subject/l/public/s1076962.jpg',
-            '9787020002210': 'https://img1.doubanio.com/view/subject/l/public/s1076961.jpg',
-            '9787115546012': 'https://img1.doubanio.com/view/subject/l/public/s29195878.jpg',
-            '9787115546013': 'https://img1.doubanio.com/view/subject/l/public/s25648004.jpg',
-            '9787115546014': 'https://img2.doubanio.com/view/subject/l/public/s29651122.jpg'
-        } %}
-        {% if book.ISBN in covers %}
-            <img src="{{ covers[book.ISBN] }}" alt="{{ book.title }}">
-        {% else %}
-            <div class="book-detail-placeholder">📚</div>
-        {% endif %}
+        <img src="{{ url_for('static', filename='images/covers/' + book.ISBN + '.svg') }}" alt="{{ book.title }}">
     </div>
 
     <!-- Book Info -->
@@ -68,6 +50,7 @@
         <div class="detail-actions">
             {% if session.customer_id and book.stock > 0 %}
                 <a href="{{ url_for('orders.create_order') }}" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                     立即购买
                 </a>
             {% endif %}
