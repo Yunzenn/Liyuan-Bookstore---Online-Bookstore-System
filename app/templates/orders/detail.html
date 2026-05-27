@@ -3,6 +3,7 @@
 {% block title %}订单详情 #{{ order.order_id }} - 梨园书屋{% endblock %}
 
 {% block content %}
+<div class="container">
 <div class="page-header">
     <h1>订单详情</h1>
     <p><a href="{{ url_for('orders.order_list') }}">← 返回订单列表</a></p>
@@ -141,5 +142,6 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}

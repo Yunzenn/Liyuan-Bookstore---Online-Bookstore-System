@@ -3,46 +3,142 @@
 {% block title %}梨园书屋 - 网上书店{% endblock %}
 
 {% block content %}
-<div class="page-header" style="text-align: center; margin-top: 40px;">
-    <h1 style="font-size: 2.5rem; margin-bottom: 12px;">欢迎来到梨园书屋</h1>
-    <p style="font-size: 1.125rem; max-width: 500px; margin: 0 auto;">
-        探索知识的海洋，发现阅读的乐趣。精选优质图书，为您开启智慧之门。
-    </p>
+<!-- Hero Section with Animated Background -->
+<div class="hero-section">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+        <div class="hero-badge">精选好书，品质阅读</div>
+        <h1 class="hero-title">
+            <span class="hero-title-line">探索知识的</span>
+            <span class="hero-title-line hero-title-gradient">无限可能</span>
+        </h1>
+        <p class="hero-subtitle">
+            梨园书屋为您精选计算机、文学、科技类优质图书，让阅读成为一种享受。
+        </p>
+        <div class="hero-actions">
+            <a href="{{ url_for('books.book_list') }}" class="btn btn-primary btn-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                浏览图书
+            </a>
+            {% if not session.customer_id %}
+                <a href="{{ url_for('auth.register') }}" class="btn btn-secondary btn-lg">
+                    注册账号
+                </a>
+            {% else %}
+                <a href="{{ url_for('orders.create_order') }}" class="btn btn-secondary btn-lg">
+                    创建订单
+                </a>
+            {% endif %}
+        </div>
+    </div>
 </div>
 
-<div style="text-align: center; margin: 40px 0;">
-    <a href="{{ url_for('books.book_list') }}" class="btn btn-primary btn-lg">
-        浏览图书
-    </a>
-    {% if not session.customer_id %}
-        <a href="{{ url_for('auth.register') }}" class="btn btn-secondary btn-lg" style="margin-left: 12px;">
-            注册账号
+<!-- Stats Section -->
+<div class="stats-section">
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-number" data-count="12">0</div>
+            <div class="stat-label">精选图书</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-count="5">0</div>
+            <div class="stat-label">优质出版社</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-count="100">0</div>
+            <div class="stat-label">满意读者</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" data-count="24">0</div>
+            <div class="stat-label">小时服务</div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="features-section">
+    <div class="section-header">
+        <h2 class="section-title">为什么选择梨园书屋</h2>
+        <p class="section-subtitle">我们致力于为读者提供最优质的阅读体验</p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </div>
+            <h3 class="feature-title">海量图书</h3>
+            <p class="feature-desc">精选计算机、文学、科技类优质图书，满足您的阅读需求</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            </div>
+            <h3 class="feature-title">便捷下单</h3>
+            <p class="feature-desc">支持多种图书一次下单，轻松完成购物流程</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </div>
+            <h3 class="feature-title">订单追踪</h3>
+            <p class="feature-desc">实时查看订单状态，从付款到收货全程掌控</p>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="cta-section">
+    <div class="cta-content">
+        <h2 class="cta-title">开始您的阅读之旅</h2>
+        <p class="cta-subtitle">加入梨园书屋，发现更多精彩图书</p>
+        <a href="{{ url_for('books.book_list') }}" class="btn btn-primary btn-lg">
+            立即探索
         </a>
-    {% else %}
-        <a href="{{ url_for('orders.create_order') }}" class="btn btn-secondary btn-lg" style="margin-left: 12px;">
-            创建订单
-        </a>
-    {% endif %}
-</div>
-
-<!-- Features -->
-<div class="features-grid">
-    <div class="feature-card">
-        <div class="feature-icon">📚</div>
-        <h3 class="feature-title">海量图书</h3>
-        <p class="feature-desc">精选计算机、文学、科技类优质图书，满足您的阅读需求</p>
-    </div>
-
-    <div class="feature-card">
-        <div class="feature-icon">🛒</div>
-        <h3 class="feature-title">便捷下单</h3>
-        <p class="feature-desc">支持多种图书一次下单，轻松完成购物流程</p>
-    </div>
-
-    <div class="feature-card">
-        <div class="feature-icon">📦</div>
-        <h3 class="feature-title">订单追踪</h3>
-        <p class="feature-desc">实时查看订单状态，从付款到收货全程掌控</p>
     </div>
 </div>
+
+{% block extra_js %}
+<script>
+// Animate stats numbers
+function animateStats() {
+    const stats = document.querySelectorAll('.stat-number');
+    stats.forEach(stat => {
+        const target = parseInt(stat.getAttribute('data-count'));
+        const duration = 2000;
+        const start = 0;
+        const increment = target / (duration / 16);
+        let current = start;
+
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                stat.textContent = target + '+';
+                clearInterval(timer);
+            } else {
+                stat.textContent = Math.floor(current);
+            }
+        }, 16);
+    });
+}
+
+// Intersection Observer for animations
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
+            if (entry.target.classList.contains('stats-section')) {
+                animateStats();
+            }
+        }
+    });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feature-card, .stats-section, .cta-section').forEach(el => {
+    observer.observe(el);
+});
+</script>
+{% endblock %}
 {% endblock %}

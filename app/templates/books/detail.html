@@ -3,6 +3,7 @@
 {% block title %}{{ book.title }} - 梨园书屋{% endblock %}
 
 {% block content %}
+<div class="container">
 <div class="page-header">
     <h1>图书详情</h1>
     <p><a href="{{ url_for('books.book_list') }}">← 返回图书目录</a></p>
@@ -57,5 +58,6 @@
             <a href="{{ url_for('books.book_list') }}" class="btn btn-secondary">返回列表</a>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}
